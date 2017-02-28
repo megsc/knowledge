@@ -1,0 +1,12 @@
+What are dynamic variables?
+Dynamic variables are variables whose memory address is determined when the program is run rather than during compilation.
+Describe user-defined data structures.
+A user-defined data structure is a fixed set of fields that hold data in a format defined by the user.
+Outline the basic principles of project management.
+Project Management is the leading of a team to achieve specific goals. This includes the initiating, planning, executing and controlling of the team's plan and managing the hu
+Describe the key features of the software development life cycle (SDLC)?
+The SDLC provides a structure for system developers to plan, analyze, design, test and implement in phases.
+Describe the importance of software specifications.
+Software specifications provide a complete description of a system and how it is expected to perform. The specification is important as it establishes what the system will and won't do for both the developer and the client.
+Identify the methods and importance of version control.
+Version control documents the evolution of the development process and tracks/documents changes to create a version history. Methods of version control include: saving backup copies with version numbers, work from shared folders or use version control software such as Git.

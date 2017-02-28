@@ -1,0 +1,6 @@
+﻿  knowledge.cpp
+e:\al - mon am\assessment one\knowledge\knowledge\knowledge.cpp(121): warning C4018: '<': signed/unsigned mismatch
+e:\al - mon am\assessment one\knowledge\knowledge\knowledge.cpp(149): warning C4018: '<': signed/unsigned mismatch
+e:\al - mon am\assessment one\knowledge\knowledge\knowledge.cpp(235): warning C4800: 'std::size_t': forcing value to bool 'true' or 'false' (performance warning)
+  knowledge.vcxproj -> E:\AL - Mon AM\Assessment One\knowledge\Debug\knowledge.exe
+  knowledge.vcxproj -> E:\AL - Mon AM\Assessment One\knowledge\Debug\knowledge.pdb (Full PDB)
