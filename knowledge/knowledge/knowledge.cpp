@@ -1,10 +1,11 @@
 // knowledge.cpp : Defines the entry point for the console application.
 //
-//read txt file to 2d array
-//sort 2d array alphabetically for 1st col only
-//2d array to object vector
-//output to display questions or search for keyword
 //
+//Assignment 1: Show Me The Knowledge!
+//Megan Carlton 
+//submitted 05 MAR 17 
+//
+
 
 
 #include "stdafx.h"
@@ -22,6 +23,11 @@ using namespace std;
 
 void outputMenu(vector<Questions>arrQues);
 bool binarySearch(vector<string>& sorted_vec, const string &keyword);
+void dynamicArray();
+
+const int arrRows = 10;
+const int arrCols = 2;
+const int fileLines = 20;
 
 int main()
 {
@@ -30,17 +36,20 @@ int main()
 
 	int rows = 0;
 	int cols = 0;
-	string my2dArray[6][2];
+	string my2dArray[arrRows][arrCols];
 	
 	string question, answer;
 	
 
+
 	//read txt file into 2d array
-	ifstream myfile("questions.txt");
-	
+
+	ifstream myfile("questions2.dat", ios::in | ios::binary);
+
 	if (myfile.is_open())
 	{
 		string line;
+			
 
 		while (getline(myfile, line))
 		{
@@ -50,6 +59,7 @@ int main()
 		}
 		rows++;
 		
+
 
 		myfile.close();
 	}
@@ -65,10 +75,10 @@ int main()
 
 
 	//sorting array by first col alphabetically
-	//n = rows from 2dArray
-	int n = 6;
+	//numbRows = rows from 2dArray
+	int numbRows = arrRows;
 	auto ptr = (pair<string, string>*) my2dArray;
-	sort(ptr, ptr + n);
+	sort(ptr, ptr + numbRows);
 
 
 
@@ -76,7 +86,7 @@ int main()
 
 	int count = 0;
 
-	for (int i = 0; i < 6; ++i)//6 = number of rows in 2dArray
+	for (int i = 0; i < arrRows; ++i)//arrRows = number of rows in 2dArray
 	{
 
 		Questions newQ;
@@ -90,6 +100,7 @@ int main()
 
 	//output menu
 	outputMenu(arrQues);
+
 
 	return 0;
 
@@ -106,11 +117,14 @@ void outputMenu(vector<Questions> arrQues)
 	string menuChoice;
 	string next;
 
+
 	cout << "Ready for some knowledge?" << endl;
 	cout << "Would you like to: " << endl;
 	cout << "1 - Display the questions" << endl;
 	cout << "2 - Search for a keyword" << endl;
-	cout << "3 - Exit" << endl;
+	cout << "3 - Read text file randomly" << endl;
+	cout << "4 - Dynamic Array Demo" << endl;
+	cout << "5 - Exit" << endl;
 
 	cin >> menuChoice;
 
@@ -124,12 +138,13 @@ void outputMenu(vector<Questions> arrQues)
 			cout << arrQues[i].get_question() << endl;
 			cout << "\nAnswer: " << endl;
 			cout << arrQues[i].get_answer() << endl;
-			cout << "\nPress N for next question...." << endl;
+			cout << "\nPress any key for next question...." << endl;
 			cin >> next;
 			cout << endl;
 		}
 
 	}
+
 
 
 	//binary search for entered keyword
@@ -142,7 +157,7 @@ void outputMenu(vector<Questions> arrQues)
 		cin >> keyword;
 
 
-		string strQA[12]; //12 = number of lines in txt file
+		string strQA[fileLines]; //fileLines = number of lines of text in txt file
 		int count = 0;
 
 		//object vector to string array
@@ -159,7 +174,7 @@ void outputMenu(vector<Questions> arrQues)
 		vector<string> words{};
 
 		//string array to single word string vector
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < fileLines; i++)
 		{
 			istringstream each(strQA[i]);
 			string word;
@@ -194,8 +209,55 @@ void outputMenu(vector<Questions> arrQues)
 	}
 
 
-	//exit program
+
+
+	//randomly accessing a binary txt file
 	if (menuChoice == "3")
+	{
+		int numEntered;
+		string show;
+
+		cout << "Start reading from anywhere in the text file" << endl;
+		cout << "Enter number lower than 2500:" << endl;
+		cin >> numEntered;
+
+		ifstream myfile("questions2.dat", ios::in | ios::binary);
+
+		if (myfile.is_open())
+		{
+			myfile.seekg(numEntered);
+			getline(myfile, show);
+
+			cout << show << endl;
+
+			myfile.close();
+
+		}
+
+		else
+		{
+			cout << "Unable to open file";
+			exit(EXIT_FAILURE);
+
+		}
+
+
+		cin.get();
+
+	}
+
+
+	//dynamic array example
+	if (menuChoice == "4")
+	{
+		dynamicArray();
+
+	}
+
+
+
+	//exit program
+	if (menuChoice == "5")
 	{
 		exit(0);
 	}
@@ -203,10 +265,38 @@ void outputMenu(vector<Questions> arrQues)
 
 	cin.get();
 
+}
 
+
+
+
+
+void dynamicArray()
+{
+	int arrLength;
+
+	cout << "Enter a number 1-5: " << endl;
+	cin >> arrLength;
+	cout << "List the Top " << arrLength << " places you want to go on holiday" << endl;
+
+	string *holidays = new string[arrLength];
+
+
+	for (int i = 0; i < arrLength; ++i)
+	{
+		cin >> holidays[i];
+
+	}
+
+	cout << "i want to go to " << holidays[0] << " as well!\n" << endl;
+
+	delete[] holidays;
 
 
 }
+
+
+
 
 
 bool binarySearch(vector<string>& sorted_vec, const string &keyword)
