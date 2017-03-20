@@ -3,9 +3,8 @@
 //
 //Assignment 1: Show Me The Knowledge!
 //Megan Carlton 
-//submitted 05 MAR 17 
+//submitted ?? MAR 17 
 //
-
 
 
 #include "stdafx.h"
@@ -21,13 +20,17 @@
 using namespace std;
 
 
-void outputMenu(vector<Questions>arrQues);
+void outputMenu();
 bool binarySearch(vector<string>& sorted_vec, const string &keyword);
+void searchWord(vector<Questions>arrQues);
 void dynamicArray();
+void randomAccess();
+void displayQuestions(vector<Questions>arrQues);
 
 const int arrRows = 10;
 const int arrCols = 2;
 const int fileLines = 20;
+
 
 int main()
 {
@@ -76,6 +79,7 @@ int main()
 
 	//sorting array by first col alphabetically
 	//numbRows = rows from 2dArray
+
 	int numbRows = arrRows;
 	auto ptr = (pair<string, string>*) my2dArray;
 	sort(ptr, ptr + numbRows);
@@ -99,8 +103,46 @@ int main()
 
 
 	//output menu
-	outputMenu(arrQues);
 
+	bool quit = false;
+	int menuChoice;
+
+	while (!quit)
+	{
+		outputMenu();
+
+		cin >> menuChoice;
+
+		switch (menuChoice)
+		{
+			case 1:
+				displayQuestions(arrQues);
+				break;
+
+			case 2:
+				searchWord(arrQues);
+				break;
+
+			case 3:
+				randomAccess();
+				break;
+
+			case 4:
+				dynamicArray();
+				break;
+
+			case 5:
+				quit = true;
+				break;
+
+			default:
+				cout << "Oops! Please enter a number 1-5" << endl;
+				break;
+
+		}
+
+	}
+	
 
 	return 0;
 
@@ -110,13 +152,9 @@ int main()
 
 
 
-void outputMenu(vector<Questions> arrQues)
+void outputMenu()
 {
 	//output menu
-
-	string menuChoice;
-	string next;
-
 
 	cout << "Ready for some knowledge?" << endl;
 	cout << "Would you like to: " << endl;
@@ -126,148 +164,128 @@ void outputMenu(vector<Questions> arrQues)
 	cout << "4 - Dynamic Array Demo" << endl;
 	cout << "5 - Exit" << endl;
 
-	cin >> menuChoice;
+
+}
 
 
-	//output questions 
-	if (menuChoice == "1")
+
+void displayQuestions(vector<Questions> arrQues)
+{
+	//function to display questions
+
+	string next;
+
+	for (int i = 0; i < arrQues.size(); i++)
 	{
-		for (int i = 0; i < arrQues.size(); i++)
-		{
-			cout << "Question: " << endl;
-			cout << arrQues[i].get_question() << endl;
-			cout << "\nAnswer: " << endl;
-			cout << arrQues[i].get_answer() << endl;
-			cout << "\nPress any key for next question...." << endl;
-			cin >> next;
-			cout << endl;
-		}
+		cout << "Question: " << endl;
+		cout << arrQues[i].get_question() << endl;
+		cout << "\nAnswer: " << endl;
+		cout << arrQues[i].get_answer() << endl;
+		cout << "\nPress any key for next question...." << endl;
+		cin >> next;
+		cout << endl;
+	}
+}
+
+
+
+void searchWord(vector<Questions> arrQues)
+{
+	//input from user for keyword to search
+	string keyword;
+	cout << "Enter keyword: " << endl;
+	cin >> keyword;
+
+
+	string strQA[fileLines]; //fileLines = number of lines of text in txt file
+	int count = 0;
+
+	//object vector to string array
+	for (int i = 0; i < arrQues.size(); i++)
+	{
+		stringstream convertQA;
+		convertQA.str(arrQues[i].get_question() + "\n" + arrQues[i].get_answer());
+		strQA[count] = convertQA.str();
+		count++;
 
 	}
 
 
+	vector<string> words{};
 
-	//binary search for entered keyword
-	if (menuChoice == "2")
+	//string array to single word string vector
+	for (int i = 0; i < fileLines; i++)
 	{
-
-		//input from user for keyword to search
-		string keyword;
-		cout << "Enter keyword: " << endl;
-		cin >> keyword;
-
-
-		string strQA[fileLines]; //fileLines = number of lines of text in txt file
-		int count = 0;
-
-		//object vector to string array
-		for (int i = 0; i < arrQues.size(); i++)
+		istringstream each(strQA[i]);
+		string word;
+		while (each >> word)
 		{
-			stringstream convertQA;
-			convertQA.str(arrQues[i].get_question() + "\n" + arrQues[i].get_answer());
-			strQA[count] = convertQA.str();
-			count++;
-
+			//cout << word << endl;
+			words.push_back(word);
 		}
 
-
-		vector<string> words{};
-
-		//string array to single word string vector
-		for (int i = 0; i < fileLines; i++)
-		{
-			istringstream each(strQA[i]);
-			string word;
-			while (each >> word)
-			{
-				//cout << word << endl;
-				words.push_back(word);
-			}
-
-
-		}
-
-
-		//sorting word vector for binary search
-		sort(words.begin(), words.end());
-
-		//binarySearch method for keyword input 
-		bool found = binarySearch(words, keyword);
-
-		if (found == true)
-		{
-			cout << "found" << endl;
-		}
-
-		else
-		{
-			cout << "not found" << endl;
-		}
-
-		cin.get();
 
 	}
 
 
+	//sorting word vector for binary search
+	sort(words.begin(), words.end());
 
+	//binarySearch method for keyword input 
+	bool found = binarySearch(words, keyword);
 
-	//randomly accessing a binary txt file
-	if (menuChoice == "3")
+	if (found == true)
 	{
-		int numEntered;
-		string show;
+		cout << "found" << endl;
+	}
 
-		cout << "Start reading from anywhere in the text file" << endl;
-		cout << "Enter number lower than 2500:" << endl;
-		cin >> numEntered;
+	else
+	{
+		cout << "not found" << endl;
+	}
 
-		ifstream myfile("questions2.dat", ios::in | ios::binary);
-
-		if (myfile.is_open())
-		{
-			myfile.seekg(numEntered);
-			getline(myfile, show);
-
-			cout << show << endl;
-
-			myfile.close();
-
-		}
-
-		else
-		{
-			cout << "Unable to open file";
-			exit(EXIT_FAILURE);
-
-		}
+	cin.get();
 
 
-		cin.get();
+
+}
+
+
+
+void randomAccess()
+{
+	int numEntered;
+	string show;
+
+	cout << "Read a line from anywhere in the text file" << endl;
+	cout << "Enter number lower than 2500:" << endl;
+	cin >> numEntered;
+
+	ifstream myfile("questions2.dat", ios::in | ios::binary);
+
+	if (myfile.is_open())
+	{
+		myfile.seekg(numEntered);
+		getline(myfile, show);
+
+		cout << show << endl;
+
+		myfile.close();
 
 	}
 
-
-	//dynamic array example
-	if (menuChoice == "4")
+	else
 	{
-		dynamicArray();
+		cout << "Unable to open file";
+		exit(EXIT_FAILURE);
 
-	}
-
-
-
-	//exit program
-	if (menuChoice == "5")
-	{
-		exit(0);
 	}
 
 
 	cin.get();
 
+
 }
-
-
 
 
 
@@ -275,7 +293,8 @@ void dynamicArray()
 {
 	int arrLength;
 
-	cout << "Enter a number 1-5: " << endl;
+	cout << "Let's create an array!" << endl;
+	cout << "Enter a number 1-6: " << endl;
 	cin >> arrLength;
 	cout << "List the Top " << arrLength << " places you want to go on holiday" << endl;
 
@@ -288,10 +307,16 @@ void dynamicArray()
 
 	}
 
-	cout << "i want to go to " << holidays[0] << " as well!\n" << endl;
+	cout << "I want to go to " << holidays[0] << " as well!\n" << endl;
+	cout << "You want to travel to: " << endl;
+
+	for (int i = 0; i < arrLength; ++i)
+	{
+		cout << holidays[i] << ", " << endl;
+
+	}
 
 	delete[] holidays;
-
 
 }
 
